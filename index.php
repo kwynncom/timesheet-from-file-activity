@@ -6,15 +6,45 @@ new fwatch('/tmp/blah');
 
 class fwatch {
 
+    const linelimit = 10; // limit for testing; 0 does mean 0 or don't do anything
+    // const linelimit = PHP_INT_MAX;
     
     
 public function __construct($paths) {
-    $this->c2($paths);
+    $this->paths = $paths;
+    self::tests();
+    $this->doit();
 }
 
-private function c2($paths) {
+private function tests() {
+    strtotimeRecent('2020-06-01');
+    strtotimeRecent('2020-01-01');    
+    // strtotimeRecent('2019-01-01');   // should fail
+    strtotimeRecent('2020-07-06');  
+    strtotimeRecent('2020-07-07'); 
+    // strtotimeRecent('2020-07-08');  // should fail depending
+}
 
-    $c = "inotifywait -m -r --format %T_%e_%w%f --timefmt %s $paths 2>&1 & echo $!";
+private function process1($l, $cnt) {
+    preg_match('/^(\d+)_([^_]+)_(.*)/', $l, $matches); unset($l);
+    kwas(isset($matches[3]), 'bad dat 730');
+    
+    $ts = strtotimeRecent($matches[1]);
+    $paths = $this->paths;
+    $file = $matches[3];
+    $acts = $matches[2];
+    $i = $cnt; unset($cnt);
+    unset($matches);
+    $vars = get_defined_vars();
+    $x = 2;
+}
+
+private function doit() {
+    
+    if (self::linelimit <= 0) return;
+
+    $paths = $this->paths;
+    $c = "inotifywait -m -r --format %T_%e_%w%f --timefmt %s $paths 2>&1 & echo $!"; unset($paths);
     $f = popen($c,'r');
 
     $i = 0;
@@ -25,15 +55,18 @@ private function c2($paths) {
 	    continue; 
 	} else if (!$headersDone) {
 	    $headersDone = true;
-	    $i = 1;
+	    $i = 0;
 	}
 	
-	echo $i++ . ' ' . $o;
-	if ($i > 10) break;
+	$i++;
+	$this->process1($o, $i);
+	
+	echo $i . ' ' . $o;
+	if ($i >= self::linelimit) break;
     }
 
     fclose($f);
-    posix_kill($this->pid, SIGTERM);
+    posix_kill($this->pid, SIGHUP);
 }
 
 private function processHeaders($i, $l) {
