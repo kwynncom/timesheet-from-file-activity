@@ -3,7 +3,12 @@ derive billable hours from file activity
 
 The inotifywait command can track file opens, writes, etc.  Based on what files are opened, I can track activity and thus billable hours for a given project.  See inotify details below.
 
-STATUS
+UPDATES
+
+same day 7:18pm EDT GMT -4 New York, Atlanta
+
+I have something working.
+
 
 2020/07/06 - I have only sketched the very basic code so far.  I'm not sure when I'll commit code.  Maybe later today, maybe 6 months from now, maybe never.  I wanted to lay down the project groundwork, though.
 
