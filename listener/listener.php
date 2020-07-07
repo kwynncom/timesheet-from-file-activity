@@ -1,18 +1,14 @@
 <?php
 
-require_once('../testMode.php');
+require_once('../config.php');
 require_once('reg1.php');
 
 class fwatch {
-
-    // limit for testing; 0 means do not write any lines: do setup only and exit upon first file activity, before writing to the log
-    const linelimit = 0;
-    // const linelimit = PHP_INT_MAX;
-    
     
 public function __construct() {
 
-    $this->paths = ftotTestMode::getPaths();
+    $this->paths     = ftotConfig::getPaths();
+    $this->linelimit = ftotConfig::getMaxLines();
     $this->doit();
 }
 
@@ -33,7 +29,7 @@ public static function parseLine($l) {
 private function getCommand() {
     $c  = '';
     $c .= 'inotifywait -m ';
-    if (ftotTestMode::doRecursive()) $c .= '-r ';
+    if (ftotConfig::doRecursive()) $c .= '-r ';
     $paths = $this->paths;
     // kwas(file_exists($paths)), 'path'
     $c .= "--format %T__%e_%w%f --timefmt %s $paths 2>&1 & echo $!";
@@ -59,14 +55,13 @@ private function doit() {
 	    $this->createFile();
 	}
 
-	if ($i >= self::linelimit) break;	
+	if ($i >= $this->linelimit) break;	
 	$i++;
 	
 	logreg1($i, $o);
 	fwrite($this->outh, $o);
     }
 
-    // make sure destructor runs **** !!! *** 
     return; 
 }
 
@@ -79,7 +74,7 @@ public function __destruct() {
 }
 
 private function createFile() {
-    $f = KWYNN_FTOT_INOTIFY_OUTPUT_FILE;
+    $f = ftotConfig::getInotLogFile();
     $h = fopen($f, 'w'); kwas($h, 'fopen failed - 1333');
     $cmr = chmod($f, 0600); kwas($cmr, 'chmod failed - 1401');
     $lr = flock($h, LOCK_EX); kwas($lr, 'lock failed - 1447');
