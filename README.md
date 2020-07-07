@@ -5,6 +5,12 @@ The inotifywait command can track file opens, writes, etc.  Based on what files 
 
 UPDATES
 
+7:57pm
+
+I'll probably get rid of the original / first working files.
+Getting rid of strtotimeRecent() tests
+
+
 same day 7:18pm EDT GMT -4 New York, Atlanta
 
 I have something working.
