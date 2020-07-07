@@ -1,10 +1,11 @@
 <?php
 
+require_once('../config.php');
+
 class fwatch {
 
-    // limit for testing; 0 does mean 0 or don't do anything
+    // limit for testing; 0 means do not write any lines and do setup only
     const linelimit = 5;
-    // const linelimit = 10; 
     // const linelimit = PHP_INT_MAX;
     
     
@@ -31,8 +32,6 @@ public static function parseLine($l) {
 
 private function doit() {
     
-    if (self::linelimit <= 0) return;
-
     $paths = $this->paths;
     $c = "inotifywait -m -r --format %T__%e_%w%f --timefmt %s $paths 2>&1 & echo $!"; unset($paths);
     $pf = popen($c,'r');
@@ -48,12 +47,10 @@ private function doit() {
 	    $i = 0;
 	    $this->createFile();
 	}
-	
+
+	if ($i >= self::linelimit) break;	
 	$i++;
-	
 	fwrite($this->outh, $o);
-	
-	if ($i >= self::linelimit) break;
     }
 
     fclose($pf);
@@ -62,11 +59,10 @@ private function doit() {
 }
 
 private function createFile() {
-    $f = tempnam('/tmp/', 'kwynn_inotifywatch_log_'); kwas($f, 'temp file cre failed - 1333');
-    $this->outf = $f;
+    $f = KWYNN_FTOT_INOTIFY_OUTPUT_FILE;
     $h = fopen($f, 'w'); kwas($h, 'fopen failed - 1333');
+    $cmr = chmod($f, 0600); kwas($cmr, 'chmod failed - 1401');
     $this->outh = $h;
-    
 }
 
 private function processHeaders($i, $l) {
