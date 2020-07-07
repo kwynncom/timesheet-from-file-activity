@@ -15,7 +15,7 @@ public function __construct($paths, $cbf) {
 }
 
 public static function parseLine($l) {
-    preg_match('/^(\d+) (\d+)_([^_]+)_(.*)/', $l, $matches); unset($l);
+    preg_match('/^(\d+) (\d+)__([^_]+)_(.*)/', $l, $matches); unset($l);
     kwas(isset($matches[4]), 'bad dat 730');
     
     $ts = strtotimeRecent($matches[2]);
@@ -33,7 +33,7 @@ private function doit() {
     if (self::linelimit <= 0) return;
 
     $paths = $this->paths;
-    $c = "inotifywait -m -r --format %T_%e_%w%f --timefmt %s $paths 2>&1 & echo $!"; unset($paths);
+    $c = "inotifywait -m -r --format %T__%e_%w%f --timefmt %s $paths 2>&1 & echo $!"; unset($paths);
     $f = popen($c,'r');
 
     $i = 0;

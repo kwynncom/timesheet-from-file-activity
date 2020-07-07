@@ -33,8 +33,10 @@ class dao_fileact extends dao_generic {
 	    $dat['plev'] = 1;
 	    $dat['appv'] = 0;
 	    $dat['datv'] = 1;
+	    $dat['oid' ] = $r['_id'];
 	    $dat['path'] = ftt::pathToArray($dat['file']);
 	    $this->acoll->insertOne($dat);
+	    // $this->acoll->deleteOne(['_id' => $r['_id']]);
 	}
     }
 }
