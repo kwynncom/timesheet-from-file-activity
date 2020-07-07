@@ -5,6 +5,11 @@ The inotifywait command can track file opens, writes, etc.  Based on what files 
 
 STATUS
 
+4:51pm 
+
+On third thought, it may be an issue, but I'm not sure it's something to solve given that the live system won't run in NetBeans / xdebug.
+
+
 4:42pm
 
 On second thought, maybe there isn't a problem.  My destructor seems to work.  
