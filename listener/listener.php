@@ -66,13 +66,15 @@ private function doit() {
 }
 
 public function __destruct() {
+    
+    file_put_contents('/tmp/des', 'destructor ran ' . date('r') . "\n", FILE_APPEND);
+    
     fclose($this->pf);
     posix_kill($this->pid, SIGHUP);
     
     if (!isset($this->outh)) return;
     flock ($this->outh, LOCK_UN);
     fclose($this->outh);
-    
 }
 
 private function createFile() {

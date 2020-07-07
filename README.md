@@ -5,7 +5,19 @@ The inotifywait command can track file opens, writes, etc.  Based on what files 
 
 STATUS
 
-It writes data to MongoDB.  I'm having trouble with scale, though:
+4:42pm
+
+On second thought, maybe there isn't a problem.  My destructor seems to work.  
+
+
+2020/07/07 4:27pm my time (defined below, usually)
+
+I'm writing to a file rather than MongoDB.  I've set limits on that file.  
+
+My next task is to fix the situation where I kill the debugger in NetBeans but inotifywait doesn't stop.
+
+
+It writes data to MongoDB.  I'm having trouble with scale, though.
 
 INOTIFY LIMITS
 

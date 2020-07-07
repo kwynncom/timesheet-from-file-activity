@@ -26,7 +26,7 @@ class ftotConfig {
     public static function getMaxLines()    { 
 	if (!self::isTest()) return self::linelimit; 
 	
-	return 20000;
+	return 20;
 	
     }
     public static function getMaxGB()       { 
@@ -38,6 +38,8 @@ class ftotConfig {
     
     public static function isTest() { 	return true; }
 
-    public static function doRecursive() { return !self::isTest();     }
+    public static function doRecursive() { 
+	// return true;
+	return !self::isTest();     }
     // public static function 
 }
