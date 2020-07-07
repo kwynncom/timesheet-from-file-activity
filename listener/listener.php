@@ -48,11 +48,11 @@ private function doit() {
     while ($o = fgets($pf)) {
 	if ($i <= 2 && !$headersDone) { 
 	    $this->processHeaders($i++, $o);
-	    continue; 
-	} else if (!$headersDone) {
-	    $headersDone = true;
-	    $i = 0;
-	    $this->createFile();
+	    if ($i === 3 && !$headersDone) {
+		$headersDone = true;
+		$i = 0;
+		$this->createFile();
+	    } else continue; 
 	}
 
 	if ($i >= $this->linelimit) break;	
@@ -66,9 +66,11 @@ private function doit() {
 }
 
 public function __destruct() {
-    flock ($this->pf, LOCK_UN);
     fclose($this->pf);
     posix_kill($this->pid, SIGHUP);
+    
+    if (!isset($this->outh)) return;
+    flock ($this->outh, LOCK_UN);
     fclose($this->outh);
     
 }

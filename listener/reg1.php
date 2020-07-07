@@ -15,7 +15,7 @@ function logreg1($i, $l) {
     $sl  = strlen($l);
     $sz += $sl;
     if ($sz >= $fmax) {
-	die('max log file size reached where max in bytes = ' . number_format($fmax));
+	die('max log file size reached where max in bytes = ' . number_format($fmax) . "\n");
     }
     
     

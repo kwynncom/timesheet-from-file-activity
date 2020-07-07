@@ -1,5 +1,6 @@
 <?php
 
+require_once('/opt/kwynn/kwutils.php');
 // define('KWYNN_FTOT_MIN_REMAIN_GB', 4); // ** move below
 
 
@@ -13,12 +14,11 @@ class ftotConfig {
 	
 	static $cu = false;
 	
-	if (self::isTest()) return '/tmp/';
+	// if (self::isTest()) return '/tmp/';
 	
-	if (!cu) $cu = get_current_user();
-	
+	if (!$cu) $cu = get_current_user();
 	$path = '/home/' . $cu . '/';
-	
+
 	return $path;
     }   
     
@@ -26,13 +26,13 @@ class ftotConfig {
     public static function getMaxLines()    { 
 	if (!self::isTest()) return self::linelimit; 
 	
-	return 1000;
+	return 20000;
 	
     }
     public static function getMaxGB()       { 
 	if (!self::isTest())  return self::maxGB; 
 	
-	return 0.000001;
+	return 0.001;
 	
     }
     
