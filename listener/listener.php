@@ -1,18 +1,18 @@
 <?php
 
-require_once('../config.php');
+require_once('../testMode.php');
+require_once('reg1.php');
 
 class fwatch {
 
-    // limit for testing; 0 means do not write any lines and do setup only
-    const linelimit = 5;
+    // limit for testing; 0 means do not write any lines: do setup only and exit upon first file activity, before writing to the log
+    const linelimit = 0;
     // const linelimit = PHP_INT_MAX;
     
     
-public function __construct($pathsin = false, $cbf) {
-    if ($pathsin) $this->paths = $pathsin;
-    else          $this->paths = KWYNN_FTOT_DEFAULT_WATCH_PATHS;
-    $this->cbf   = $cbf;
+public function __construct() {
+
+    $this->paths = ftotTestMode::getPaths();
     $this->doit();
 }
 
@@ -30,11 +30,22 @@ public static function parseLine($l) {
     return $vars;
 }
 
+private function getCommand() {
+    $c  = '';
+    $c .= 'inotifywait -m ';
+    if (ftotTestMode::doRecursive()) $c .= '-r ';
+    $paths = $this->paths;
+    // kwas(file_exists($paths)), 'path'
+    $c .= "--format %T__%e_%w%f --timefmt %s $paths 2>&1 & echo $!";
+    return $c;
+}
+
+
 private function doit() {
     
-    $paths = $this->paths;
-    $c = "inotifywait -m -r --format %T__%e_%w%f --timefmt %s $paths 2>&1 & echo $!"; unset($paths);
-    $pf = popen($c,'r');
+    $c = $this->getCommand(); unset($paths);
+    $pf = popen($c,'r'); unset($c);
+    $this->pf = $pf;
 
     $i = 0;
     $headersDone = false; 
@@ -50,18 +61,28 @@ private function doit() {
 
 	if ($i >= self::linelimit) break;	
 	$i++;
+	
+	logreg1($i, $o);
 	fwrite($this->outh, $o);
     }
 
-    fclose($pf);
+    // make sure destructor runs **** !!! *** 
+    return; 
+}
+
+public function __destruct() {
+    flock ($this->pf, LOCK_UN);
+    fclose($this->pf);
     posix_kill($this->pid, SIGHUP);
     fclose($this->outh);
+    
 }
 
 private function createFile() {
     $f = KWYNN_FTOT_INOTIFY_OUTPUT_FILE;
     $h = fopen($f, 'w'); kwas($h, 'fopen failed - 1333');
     $cmr = chmod($f, 0600); kwas($cmr, 'chmod failed - 1401');
+    $lr = flock($h, LOCK_EX); kwas($lr, 'lock failed - 1447');
     $this->outh = $h;
 }
 
