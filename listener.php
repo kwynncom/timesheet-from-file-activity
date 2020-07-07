@@ -2,7 +2,9 @@
 
 class fwatch {
 
-    const linelimit = 10; // limit for testing; 0 does mean 0 or don't do anything
+    // limit for testing; 0 does mean 0 or don't do anything
+    const linelimit = 10000;
+    // const linelimit = 10; 
     // const linelimit = PHP_INT_MAX;
     
     
@@ -67,8 +69,8 @@ private function processHeaders($i, $l) {
 	$this->pid = $pr;
 	return;
     }
-    if ($i === 1) kwas(strpos($l, 'Setting up watches'  ) !== false, 'invalid line 2');
-    if ($i === 2) kwas(strpos($l, 'Watches established.') !== false, 'invalid line 3');    
+    if ($i === 1) kwas(strpos($l, 'Setting up watches'  ) !== false, 'invalid line 2 = ' . $l);
+    if ($i === 2) kwas(strpos($l, 'Watches established.') !== false, 'invalid line 3 = ' . $l);    
     
 }
 }

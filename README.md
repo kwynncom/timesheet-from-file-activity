@@ -3,6 +3,30 @@ derive billable hours from file activity
 
 The inotifywait command can track file opens, writes, etc.  Based on what files are opened, I can track activity and thus billable hours for a given project.  See inotify details below.
 
+STATUS
+
+It writes data to MongoDB.  I'm having trouble with scale, though:
+
+INOTIFY LIMITS
+
+An error: Failed to watch /home/.../; upper limit on inotify watches reached!
+
+See: https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
+
+This does indeed temporarily / experimentally solve the problem:
+
+sudo sysctl fs.inotify.max_user_watches=524288
+fs.inotify.max_user_watches = 524288
+sudo sysctl -p
+
+
+THAT BLOODY GIT CREATION / CONNECTION COMMAND:
+
+git remote set-url origin git@github.com:kwynncom timesheet-from-file-activity.git
+
+Bloody as in I keep forgetting it and can't find it.  I need to proverbially tattoo it.  I suppose I should put it 
+in a GitHub or something.
+
 UPDATES
 
 7:57pm

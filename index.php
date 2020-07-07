@@ -8,7 +8,7 @@ doit();
 
 function doit() {
     
-    $path  = '/tmp/blah';
+    $path  = '/home/' . get_current_user() . '/';
     $dao = new dao_fileact($path);
     $wo = new fwatch($path, [$dao, 'listener']);
     
