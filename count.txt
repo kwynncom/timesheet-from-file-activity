@@ -1,0 +1,133 @@
+PRECISELY:
+
+db.getCollection('acts').aggregate(
+[
+    {
+        $group : {
+		_id : { 'path' : {'$arrayElemAt' : ['$path', 2] }},
+                'cnt' : { '$sum' : 1 }
+        }
+    }
+]
+);
+
+
+***
+db.getCollection('acts').aggregate(
+[
+    {
+        $group : {
+		_id : { 'path' : {'$arrayEle}},
+                'cnt' : { '$sum' : 1 }
+        }
+    }
+]
+);
+
+
+CLOSER:
+
+db.getCollection('acts').aggregate(
+   [{ $unwind :  '$path'  },
+    {
+        $group : {
+		_id : { 'path' : '$path' , 'file' : '$file' },
+                'cnt' : { '$sum' : 1 }
+        }
+    }
+]
+);
+
+VERY CLOSE:
+
+db.getCollection('acts').aggregate(
+  [  
+{ $match : { 'path.0' : { '$exists' : true }} 
+
+    }, 
+
+    {
+        $group : {
+		_id :  '$path' , tags: { $sum: 1 }
+        }
+    }
+]
+);
+
+
+EXECUTES:
+
+db.getCollection('acts').aggregate(
+  [  
+{ $match : { 'path.0' : { '$exists' : true }} 
+
+    }, 
+
+    {
+        $group : {
+		_id : { mypath :  '$path[0]' },
+ 		cnt : {$sum : 1 }
+        }
+    }
+]
+);
+
+db.getCollection('acts').aggregate(
+  [ { $match : { 'path.0' : { '$exists' : true }} 
+
+    }
+]);
+
+db.getCollection('acts').aggregate(
+  [  
+{ $match : { 'path.0' : { '$exists' : true }} 
+
+    }, 
+
+    {
+        $group : {
+		_id : { mypath :  'path.0' },
+ 		cnt : {$sum : 1 }
+        }
+    }
+]
+);
+
+
+************
+db.getCollection('acts').aggregate(
+  [ { $matches : { '$path[0]' : {'$exists : true}} 
+
+    }
+]);
+	
+
+db.getCollection('acts').aggregate(
+  [ { $matches : { '$path[0]' : {'$exists : true}} 
+
+    },
+    {
+        $group : {
+		_id : { mypath :  '$path[0]' },
+ 		cnt : {$sum : 1 }
+        }
+    }
+]
+);
+
+
+$group =   [	'$group' => [
+			'_id' => 'aggdat',
+			'bytes' => ['$sum' => '$net'],
+			's'     => ['$sum' => ['$subtract' => ['$end_exec_ts', '$begin_ts']]]
+			]  ];
+
+aggregate({
+	'$group' : {
+		'_id' : 'bypathlev',
+ 		'cnt' : {'$sum' : $path[0]}
+     }
+}
+);
+
+       '$match' : { 'path' : { '$exists' : true}},

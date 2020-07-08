@@ -2,7 +2,7 @@
 
 require_once('/opt/kwynn/kwutils.php');
 require_once('listener.php');
-require_once('./../dao.php');
+require_once(__DIR__ . '/../dao.php');
 
 doit();
 

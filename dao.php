@@ -13,8 +13,9 @@ class dao_fileact extends dao_generic {
 
     }
     
-    public function listener($l) {
+    public function listener($l, $i) {
 	// $dat = fwatch::parseLine($l);
+	$dat['i'] = $i;
 	$dat['l'] = $l;
 	$dat['plev'] = 0;
 	$dat['datv'] = 1;
@@ -23,12 +24,23 @@ class dao_fileact extends dao_generic {
 
     }
     
+    public function rmlev($l) {
+	$this->acoll->deleteMany(['plev' => $l]);	
+    }
+    
+    
     public function p1() {
-	$this->acoll->deleteMany(['plev' => 1]);
+	$this->rmlev(1);
 	$p0r = $this->acoll->find();
 	foreach($p0r as $r) {
 	    if (!isset($r['l'])) continue;
-	    $dat = fwatch::parseLine($r['l']);
+	    try { 
+		$dat = fwatch::parseLine($r['l']);
+	    } catch(Exception $ex)  { 
+		if (isset($r['i']) && $r['i'] === 1) continue;
+		throw $ex;
+		    
+	    } 
 	    $dat['r'] = date('r', $dat['ts']);
 	    $dat['plev'] = 1;
 	    $dat['appv'] = 0;

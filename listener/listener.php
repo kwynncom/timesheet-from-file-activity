@@ -1,6 +1,6 @@
 <?php
 
-require_once('../config.php');
+require_once(__DIR__ . '/../config.php');
 require_once('reg1.php');
 
 class fwatch {
@@ -13,14 +13,12 @@ public function __construct() {
 }
 
 public static function parseLine($l) {
-    preg_match('/^(\d+) (\d+)__([^_]+)_(.*)/', $l, $matches); unset($l);
-    kwas(isset($matches[4]), 'bad dat 730');
+    preg_match('/^(\d+)__([^\/]+)(\/.*)/', $l, $matches); unset($l);
+    kwas(isset($matches[3]), 'bad dat 730');
     
-    $ts = strtotimeRecent($matches[2]);
-    $file = $matches[4];
-    $acts = $matches[3];
-    $i = intval($matches[1]);
-    kwas($i && $i > 0, 'bad index parseLine watcher');
+    $ts = strtotimeRecent($matches[1]);
+    $file = $matches[3];
+    $acts = $matches[2];
     unset($matches);
     $vars = get_defined_vars();
     return $vars;
@@ -32,7 +30,7 @@ private function getCommand() {
     if (ftotConfig::doRecursive()) $c .= '-r ';
     $paths = $this->paths;
     // kwas(file_exists($paths)), 'path'
-    $c .= "--format %T__%e_%w%f --timefmt %s $paths 2>&1 & echo $!";
+    $c .= "--format %T__%e%w%f --timefmt %s $paths 2>&1 & echo $!";
     return $c;
 }
 
