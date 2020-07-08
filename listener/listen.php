@@ -11,3 +11,5 @@ function setListener() {
     $wo = new fwatch($path, [$dao, 'listener']);
     
 }
+
+if (didCLICallMe(__FILE__)) setListener();

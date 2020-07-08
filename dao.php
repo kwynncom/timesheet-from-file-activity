@@ -29,13 +29,16 @@ class dao_fileact extends dao_generic {
     }
     
     public function findLev($lev) {
-	$this->acoll->find(['plev' => $lev]);
+	return $this->acoll->find(['plev' => $lev]);
     }
     
     
     public function p1() {
 	$this->rmlev(1);
 	$p0r = $this->findLev(0);
+	
+	if (!$p0r) return;
+	
 	foreach($p0r as $r) {
 	    if (!isset($r['l'])) continue;
 	    try { 

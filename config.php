@@ -26,13 +26,13 @@ class ftotConfig {
     public static function getMaxLines()    { 
 	if (!self::isTest()) return self::linelimit; 
 	
-	return 300;
+	return 30000;
 	
     }
     public static function getMaxGB()       { 
 	if (!self::isTest())  return self::maxGB; 
 	
-	return 0.0001;
+	return 0.003;
 	
     }
     

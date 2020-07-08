@@ -15,7 +15,7 @@ public static function pf1() {
     $dao = new dao_fileact();
 
     
-    if (0) {
+    if (1) {
 	
 	$f = ftotConfig::getInotLogFile();
 	$h = fopen($f, 'r');
@@ -24,10 +24,11 @@ public static function pf1() {
 	$dao->rmlev(0);
 	while ($l = fgets($h)) {
 	    $dao->listener($l, ++$i);	
-	} unset($i);
+	} 
+	unset($i);
     }
     
-    // $dao->p1();
+    $dao->p1();
     $dao->p2();
 
 }
