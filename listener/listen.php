@@ -4,9 +4,7 @@ require_once('/opt/kwynn/kwutils.php');
 require_once('listener.php');
 require_once(__DIR__ . '/../dao.php');
 
-doit();
-
-function doit() {
+function setListener() {
     
     $path  = '/home/' . get_current_user() . '/';
     $dao = new dao_fileact($path);

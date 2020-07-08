@@ -28,10 +28,14 @@ class dao_fileact extends dao_generic {
 	$this->acoll->deleteMany(['plev' => $l]);	
     }
     
+    public function findLev($lev) {
+	$this->acoll->find(['plev' => $lev]);
+    }
+    
     
     public function p1() {
 	$this->rmlev(1);
-	$p0r = $this->acoll->find();
+	$p0r = $this->findLev(0);
 	foreach($p0r as $r) {
 	    if (!isset($r['l'])) continue;
 	    try { 
@@ -50,5 +54,25 @@ class dao_fileact extends dao_generic {
 	    $this->acoll->insertOne($dat);
 	    // $this->acoll->deleteOne(['_id' => $r['_id']]);
 	}
+	
+	$this->rmlev(0);
+    }
+    
+    public function p2() {
+	$q = [
+	    [
+		'$group' => [
+			'_id' => [ 'path' => ['$arrayElemAt' => ['$path', 0] ]],
+			'cnt'  => [ '$sum' => 1 ],
+			'mints' => [ '$min' => '$ts'],
+			'maxts' => [ '$max' => '$ts'],
+		]
+	    ]
+	];	
+	
+	$res = $this->acoll->aggregate($q)->toArray();
+	return;
+	
+	
     }
 }

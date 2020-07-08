@@ -12,7 +12,14 @@ public function __construct() {
     $this->doit();
 }
 
-public static function parseLine($l) {
+public static function parseLine($lin) {
+    
+    static $base = false;
+    
+    if (!$base) $base = ftotConfig::getPaths();
+    
+    $l = str_replace($base, '/', $lin);
+        
     preg_match('/^(\d+)__([^\/]+)(\/.*)/', $l, $matches); unset($l);
     kwas(isset($matches[3]), 'bad dat 730');
     

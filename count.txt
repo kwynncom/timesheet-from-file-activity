@@ -1,10 +1,25 @@
-PRECISELY:
+WORKING AND closer to what I want:
 
 db.getCollection('acts').aggregate(
 [
     {
         $group : {
-		_id : { 'path' : {'$arrayElemAt' : ['$path', 2] }},
+		_id : { 'path' : {'$arrayElemAt' : ['$path', 0] }},
+                'cnt'  : { '$sum' : 1 },
+                'mints' : { '$min' : '$ts'},
+                'maxts' : { '$max' : '$ts'},
+        }
+    }
+]
+);
+
+
+PRECISELY:
+db.getCollection('acts').aggregate(
+[
+    {
+        $group : {
+		_id : { 'path' : {'$arrayElemAt' : ['$path', 0] }},
                 'cnt' : { '$sum' : 1 }
         }
     }
@@ -95,25 +110,6 @@ db.getCollection('acts').aggregate(
 
 
 ************
-db.getCollection('acts').aggregate(
-  [ { $matches : { '$path[0]' : {'$exists : true}} 
-
-    }
-]);
-	
-
-db.getCollection('acts').aggregate(
-  [ { $matches : { '$path[0]' : {'$exists : true}} 
-
-    },
-    {
-        $group : {
-		_id : { mypath :  '$path[0]' },
- 		cnt : {$sum : 1 }
-        }
-    }
-]
-);
 
 
 $group =   [	'$group' => [
@@ -122,12 +118,7 @@ $group =   [	'$group' => [
 			's'     => ['$sum' => ['$subtract' => ['$end_exec_ts', '$begin_ts']]]
 			]  ];
 
-aggregate({
-	'$group' : {
-		'_id' : 'bypathlev',
- 		'cnt' : {'$sum' : $path[0]}
-     }
-}
-);
 
-       '$match' : { 'path' : { '$exists' : true}},
+
+For my own earlier examples, see 
+https://github.com/kwynncom/aws-ec2-metrics-web-display/blob/master/utils/dao.php
