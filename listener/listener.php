@@ -50,6 +50,7 @@ private function doit() {
 		$headersDone = true;
 		$i = 0;
 		$this->createFile();
+		continue;
 	    } else continue; 
 	}
 

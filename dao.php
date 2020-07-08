@@ -37,7 +37,7 @@ class dao_fileact extends dao_generic {
 	    try { 
 		$dat = fwatch::parseLine($r['l']);
 	    } catch(Exception $ex)  { 
-		if (isset($r['i']) && $r['i'] === 1) continue;
+		// if (isset($r['i']) && $r['i'] === 1) continue;
 		throw $ex;
 		    
 	    } 
